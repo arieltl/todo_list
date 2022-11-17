@@ -1,23 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/components/subjectBar.dart';
-
 import '../components/project_side_bar.dart';
 
-class CreateTodoPage extends StatefulWidget {
-  const CreateTodoPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<CreateTodoPage> createState() => _CreateTodoPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _CreateTodoPageState extends State<CreateTodoPage> {
-  final _controller = TextEditingController();
-
-  Future _signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

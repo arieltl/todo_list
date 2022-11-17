@@ -17,11 +17,15 @@ class _LoginPageState extends State<LoginPage> {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _login.text.trim(), password: _senha.text.trim());
   }
 
-  Future _loginuser() async{
+  Future _loginuser() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _login.text.trim(),
       password: _senha.text.trim(),
     );
+  }  
+
+  Future _resetPassword() async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: _login.text.trim());
   }
 
   @override
@@ -73,18 +77,28 @@ class _LoginPageState extends State<LoginPage> {
                 
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: 50,
-                        width: 100,
-                        child: ElevatedButton(onPressed: (){_loginuser();}, child: const Text("Login")),
+                        width: 120,
+                        child: ElevatedButton(
+                          onPressed: (){_loginuser();},
+                          child: const Text("Login"),
+                          ),
                       ),
                       SizedBox(
                         height: 50,
-                        width: 100,
+                        width: 120,
                         child: ElevatedButton(onPressed: (){_createUser();}, child: const Text("Sign Up")),
                       )
                     ]
+                  ),
+                  SizedBox(
+                    height: 30,
+                    width: 200,
+                    child: TextButton(onPressed: (){_resetPassword();}, child: const Text("Esqueci a Senha"),)
                   )
                  ],
                 ),

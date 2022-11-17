@@ -20,7 +20,7 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(30),
+      padding: const EdgeInsets.all(30),
       // color: Color.fromARGB(255, 243, 33, 177),
       child: Column(children: [
         TextField(
@@ -30,18 +30,18 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
               labelText: "Projetos",
               icon: IconButton(
                 onPressed: createProject,
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
               )),
         ),
         Expanded(
           child: SizedBox(
             width: 500,
             child: ListView.separated(
-                separatorBuilder: (context, index) => Divider(),
+                separatorBuilder: (context, index) => const Divider(),
                 itemCount: projetos.length,
                 itemBuilder: (context, index) => ListTile(
                       title: Text(projetos[index]),
-                      leading: Icon(Icons.arrow_right),
+                      leading: const Icon(Icons.arrow_right),
                     )),
           ),
         )

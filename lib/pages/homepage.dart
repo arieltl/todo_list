@@ -31,8 +31,8 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(150, 176, 55, 206),
-                  Color.fromARGB(150, 31, 61, 171),
+                  Color.fromARGB(120, 176, 55, 206),
+                  Color.fromARGB(120, 31, 61, 171),
                 ]
               )
             ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProjectSideBar extends StatefulWidget {
@@ -11,17 +12,21 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
   var projetos = ["eletrmoag", "modcom", "teckweb"];
   final projetNameControler = TextEditingController();
   void createProject() {
+    _signOut();
     setState(() {
       projetos.add(projetNameControler.text);
       projetNameControler.clear();
     });
   }
 
+  Future _signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(30),
-      // color: Color.fromARGB(255, 243, 33, 177),
       child: Column(children: [
         TextField(
           onSubmitted: ((value) => createProject()),

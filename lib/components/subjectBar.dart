@@ -1,14 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ProjectSideBar extends StatefulWidget {
-  const ProjectSideBar({super.key});
+class SubjectBar extends StatefulWidget {
+  const SubjectBar({super.key});
 
   @override
-  State<ProjectSideBar> createState() => _ProjectSideBarState();
+  State<SubjectBar> createState() => _SubjectBarState();
 }
 
-class _ProjectSideBarState extends State<ProjectSideBar> {
+class _SubjectBarState extends State<SubjectBar> {
   var projetos = ["eletrmoag", "modcom", "teckweb"];
   final projetNameControler = TextEditingController();
   void createProject() {
@@ -27,8 +26,8 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors:[
-                    Color.fromARGB(110, 176, 55, 206),
-                    Color.fromARGB(110, 31, 61, 171),
+                    Color.fromARGB(60, 176, 55, 206),
+                    Color.fromARGB(60, 31, 61, 171),
                   ],
                 )
               ),

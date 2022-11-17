@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_list/components/subjectBar.dart';
+
+import '../components/project_side_bar.dart';
 
 class CreateTodoPage extends StatefulWidget {
   const CreateTodoPage({super.key});
@@ -19,15 +22,16 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: const <Widget>[
-            SizedBox(
-              width: 500,
+        child: Row(
+          children: const [
+            Expanded(
               child: ProjectSideBar(),
-            )
+            ),
+            Expanded(
+              child: SubjectBar(),
+            ),
           ],
-        ),
+        )
       ),
     );
   }

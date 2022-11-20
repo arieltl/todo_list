@@ -1,18 +1,25 @@
 import 'package:todo_list/model/section.dart';
 
 class Project {
-  final String id;
   String name;
   String description;
   String ownerId;
   List<String> colab;
-  List<Section> sections;
 
-  Project(this.name, this.description, this.ownerId)
-      : id = "",
-        sections = [],
-        colab = [];
+  Project(this.name, this.description, this.ownerId) : colab = [];
 
-  Project.fromDb(this.id, this.name, this.description, this.ownerId, this.colab,
-      this.sections);
+  Project.fromJson(Map<String, dynamic> json)
+      : name = json['name']! as String,
+        description = json['description']! as String,
+        ownerId = json['ownerId']! as String,
+        colab = (json['colab']! as List).cast<String>();
+
+  Map<String, Object?> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      'ownerId': ownerId,
+      'colab': colab,
+    };
+  }
 }

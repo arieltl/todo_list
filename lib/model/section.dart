@@ -1,7 +1,8 @@
 class Section {
-  final String id;
-  String name;
+  final String name;
 
-  Section(this.name) : id = "";
-  Section.fromDb(this.id, this.name);
+  Section(this.name);
+  Section.fromJson(Map<String, dynamic> json) : this(json["name"]! as String);
+
+  Map<String, dynamic> toJson() => {"name": name};
 }

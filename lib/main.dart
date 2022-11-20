@@ -5,7 +5,7 @@ import 'package:todo_list/firebase_options.dart';
 import 'package:todo_list/pages/homepage.dart';
 import 'package:todo_list/pages/login.dart';
 
-Future main() async{
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
       ),
       home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData){
-            return const HomePage();
-          }
-          return const LoginPage();
-        }),
-      );
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const HomePage();
+            }
+            return const LoginPage();
+          }),
+    );
   }
 }

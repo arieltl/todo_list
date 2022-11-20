@@ -1,7 +1,9 @@
 class Tag {
-  String name;
-  final String id;
+  Tag({required this.name});
 
-  Tag(this.name) : id = "";
-  Tag.fromDb(this.name, this.id);
+  final String name;
+
+  Tag.fromJson(Map<String, dynamic> json) : this(name: json['name']! as String);
+
+  Map<String, dynamic> toJson() => {'name': name};
 }

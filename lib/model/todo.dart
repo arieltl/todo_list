@@ -10,7 +10,7 @@ class ToDo {
 
   final String title;
   final String description;
-  final DateTime dueDate;
+  final DateTime? dueDate;
   final DateTime creationDate;
   final String text;
   final List<String> tagIds;
@@ -20,8 +20,8 @@ class ToDo {
       : this(
           title: json['title']! as String,
           description: json['description']! as String,
-          dueDate: DateTime.parse(json['dueDate']! as String),
-          creationDate: DateTime.parse(json['creationDate']! as String),
+          dueDate: json['dueDate'] != null ? DateTime.fromMillisecondsSinceEpoch(json['dueDate']! as int) : null,
+          creationDate: DateTime.fromMillisecondsSinceEpoch(json['creationDate']! as int),
           text: json['text']! as String,
           tagIds: (json['tagIds']! as List).cast<String>(),
           importance: json['importance']! as int,
@@ -30,8 +30,8 @@ class ToDo {
   Map<String, dynamic> toJson() => {
         'title': title,
         'description': description,
-        'dueDate': dueDate.toIso8601String(),
-        'creationDate': creationDate.toIso8601String(),
+        'dueDate': dueDate?.millisecondsSinceEpoch,
+        'creationDate': creationDate.microsecondsSinceEpoch,
         'text': text,
         'tagIds': tagIds,
         'importance': importance,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/ResponsivePage.dart';
@@ -20,7 +21,15 @@ class _HomePageState extends ResponsivePageState<HomePage> {
   final data = HomePageData();
   Widget buildScaffold(BuildContext context, {required Widget body}) =>
       Scaffold(
-        appBar: AppBar(title: Text("Todo")),
+        appBar: AppBar(
+          title: Text("Todo"),
+          actions: [
+            IconButton(
+              onPressed: () => FirebaseAuth.instance.signOut(),
+              icon: const Icon(Icons.logout),
+            )
+          ],
+          ),
         body: ChangeNotifierProvider(
           create: (context) => data,
           child: body,

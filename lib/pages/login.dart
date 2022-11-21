@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(err.toString().split(" ").sublist(1).join(" ")),
             behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.all(40),
+            margin: const EdgeInsets.all(40),
           ));    
       }).then((user) => {
               _users.doc(user.user!.uid).set(
@@ -40,14 +40,27 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(err.toString().split(" ").sublist(1).join(" ")),
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(40),
+        margin: const EdgeInsets.all(40),
       ));
     });
   }
 
-  Future _resetPassword() async {
-    await FirebaseAuth.instance
-        .sendPasswordResetEmail(email: _login.text.trim());
+   _resetPassword() {
+    FirebaseAuth.instance
+        .sendPasswordResetEmail(email: _login.text.trim()).then((value) => {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Email enviado com sucesso"),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(40),
+          ))
+        }).catchError((err){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(err.toString() ),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(40),
+          ));
+        
+        });
   }
 
   @override

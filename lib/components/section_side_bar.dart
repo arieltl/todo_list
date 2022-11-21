@@ -49,7 +49,7 @@ class _SectionSideBarState extends State<SectionSideBar> {
         )),
         child: Column(children: [
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: TextField(
               onSubmitted: ((value) => createProject()),
               controller: _sectionNameFieldControler,

@@ -40,15 +40,18 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
             ],
           )),
           child: Column(children: [
-            TextField(
-              onSubmitted: ((value) => createProject()),
-              controller: projetNameControler,
-              decoration: InputDecoration(
-                  labelText: "Projetos",
-                  icon: IconButton(
-                    onPressed: createProject,
-                    icon: const Icon(Icons.add),
-                  )),
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              child: TextField(
+                onSubmitted: ((value) => createProject()),
+                controller: projetNameControler,
+                decoration: InputDecoration(
+                    labelText: "Projetos",
+                    icon: IconButton(
+                      onPressed: createProject,
+                      icon: const Icon(Icons.add),
+                    )),
+              ),
             ),
             Expanded(
               child: SizedBox(

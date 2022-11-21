@@ -12,22 +12,37 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _login = TextEditingController();
   final _senha = TextEditingController();
-  final CollectionReference _users = FirebaseFirestore.instance.collection("Users");
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection("Users");
 
-   _createUser() {
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: _login.text.trim(), password: _senha.text.trim()).then((user) => {
-      _users.doc(user.user!.uid).set({
-        "email":_login.text.trim(),
-        "username":_login.text.trim()
-      })
-    });
-  } 
+  _createUser(BuildContext context) {
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: _login.text.trim(), password: _senha.text.trim())
+        .catchError((err) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(err.toString().split(" ").sublist(1).join(" ")),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(40),
+          ));    
+      }).then((user) => {
+              _users.doc(user.user!.uid).set(
+                  {"email": _login.text.trim(), "username": _login.text.trim()})
+      });
+  }
 
-  Future _loginuser() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  _loginuser(BuildContext context) {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
       email: _login.text.trim(),
       password: _senha.text.trim(),
-    );
+    ).catchError((err) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(err.toString().split(" ").sublist(1).join(" ")),
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(40),
+      ));
+    });
   }
 
   Future _resetPassword() async {
@@ -91,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 120,
                             child: ElevatedButton(
                               onPressed: () {
-                                _loginuser();
+                                _loginuser(context);
                               },
                               child: const Text("Login"),
                             ),
@@ -101,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 120,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  _createUser();
+                                  _createUser(context);
                                 },
                                 child: const Text("Sign Up")),
                           )

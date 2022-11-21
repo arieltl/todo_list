@@ -18,16 +18,16 @@ class _SectionSideBarState extends State<SectionSideBar> {
     setState(() {
       context
           .read<HomePageData>()
-          .sections
-          .add(_sectionNameFieldControler.text);
+          .addSection(_sectionNameFieldControler.text);
       _sectionNameFieldControler.clear();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final sections = context.watch<HomePageData>().sections;
-    int selected = context.watch<HomePageData>().selectedSection;
+    final data = context.watch<HomePageData>();
+    final sections = data.sections;
+    int selected = data.selectedSection;
 
     print(context.watch<HomePageData>().mode);
     return Scaffold(

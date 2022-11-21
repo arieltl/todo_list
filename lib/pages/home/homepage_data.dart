@@ -12,6 +12,11 @@ class HomePageData extends ChangeNotifier {
   int get selectedSection => _selectedSection;
   int get selectedProject => _selectedProject;
   int get mode => _mode;
+
+  void addSection(String section) {
+    _sections.add(section);
+    notifyListeners();
+  }
   set mode (int mode) {
     _mode = mode;
     notifyListeners();

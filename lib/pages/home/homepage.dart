@@ -8,13 +8,15 @@ import '../../components/project_side_bar.dart';
 
 class HomePage extends ResponsivePage {
   const HomePage({super.key});
-
+  final mobilePage = const ProjectSideBar();
+  final desktopProj = const ProjectSideBar();
+  final tabletProj = const ProjectSideBar();
+  final desktopSec = const SectionSideBar();
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends ResponsivePageState<HomePage> {
-  final SectionSideBar sectionSideBar = SectionSideBar();
   final data = HomePageData();
   Widget buildScaffold(BuildContext context, {required Widget body}) =>
       Scaffold(
@@ -26,18 +28,19 @@ class _HomePageState extends ResponsivePageState<HomePage> {
       );
   @override
   Widget buildDesktop(BuildContext context) {
+    
     data.setMode(2);
     return buildScaffold(
       context,
       body: Center(
           child: Row(
         children: [
-          const Expanded(
-            child: ProjectSideBar(),
+           Expanded(
+            child: widget.desktopProj,
             flex: 1,
           ),
           Expanded(
-            child: sectionSideBar,
+            child: widget.desktopSec,
             flex: 1,
           ),
           Expanded(
@@ -58,8 +61,8 @@ class _HomePageState extends ResponsivePageState<HomePage> {
       body: Center(
           child: Row(
         children: [
-          const Expanded(
-            child: ProjectSideBar(),
+           Expanded(
+            child: widget.tabletProj,
             flex: 2,
           ),
           Expanded(flex: 4, child: SectionContent())
@@ -72,6 +75,6 @@ class _HomePageState extends ResponsivePageState<HomePage> {
   Widget buildMobile(BuildContext context) {
     data.setMode(0);
 
-    return buildScaffold(context, body: ProjectSideBar());
+    return buildScaffold(context, body: widget.mobilePage);
   }
 }

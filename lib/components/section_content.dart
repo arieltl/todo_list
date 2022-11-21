@@ -12,10 +12,10 @@ class SectionContent extends StatefulWidget {
 class _SectionContentState extends State<SectionContent> {
   @override
   Widget build(BuildContext context) {
-    
-    int mode = context.watch<HomePageData>().mode;
+    final data = context.watch<HomePageData>();
+    int mode = data.mode;
    
-    int selected = context.watch<HomePageData>().selectedSection;
+    int selected = data.selectedSection;
     return Scaffold(
       body: Container(
         color: mode == 2
@@ -25,7 +25,7 @@ class _SectionContentState extends State<SectionContent> {
                 : Colors.red,
         child: Center(
           child: Text(
-              "Section ${context.watch<HomePageData>().sections[selected]}"),
+              "Section ${data.sections[selected]}"),
         ),
       ),
     );

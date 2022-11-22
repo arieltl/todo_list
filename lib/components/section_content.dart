@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/pages/home/homepage_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SectionContent extends StatefulWidget {
   const SectionContent({super.key});
@@ -14,8 +15,18 @@ class _SectionContentState extends State<SectionContent> {
   Widget build(BuildContext context) {
     final data = context.watch<HomePageData>();
     int mode = data.mode;
-   
     int selected = data.selectedSection;
+    final todoReference = FirebaseFirestore.instance.collection("Todos");
+    final todoStream = FirebaseFirestore.instance.collection("Todos").snapshots();
+    final text
+
+    void createTodo(){
+      todoReference.add({
+        "completed": false,
+        "text": 
+      })
+    }
+
     return Scaffold(
       body: Container(
         color: mode == 2
@@ -24,9 +35,9 @@ class _SectionContentState extends State<SectionContent> {
                 ? Colors.blue
                 : Colors.red,
         child: Center(
-          child: Text(
-              "Section ${data.sections[selected]}"),
-        ),
+          TextField(
+            onSubmitted: ((value) => createTodo()),
+          )
       ),
     );
   }

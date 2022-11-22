@@ -28,7 +28,7 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
     projectsReference.add({
       "name": projectNameControler.text,
       "ownerId": uid,
-      "collaborators": [uid ],
+      "collaborators": [uid],
       "dateCreated": DateTime.now().millisecondsSinceEpoch
     });
     projectNameControler.clear();

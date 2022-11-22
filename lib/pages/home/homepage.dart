@@ -12,7 +12,7 @@ class HomePage extends ResponsivePage {
   final mobilePage = const ProjectSideBar();
   final desktopProj = const ProjectSideBar();
   final tabletProj = const ProjectSideBar();
-  final desktopSec = const SectionSideBar();
+  final desktopSec = const TodoSection();
   @override
   State<HomePage> createState() => _HomePageState();
 }

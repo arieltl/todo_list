@@ -6,6 +6,7 @@ class HomePageData extends ChangeNotifier {
   int _selectedSection = 0;
   int _selectedProject = 0;
   String _selectedProjectid = "";
+  String _selectedSectionid = "";
   int _mode = 0;
   List<String> get sections =>
       _sections.map((e) => "${projects[selectedProject]} $e").toList();
@@ -14,6 +15,7 @@ class HomePageData extends ChangeNotifier {
   int get selectedProject => _selectedProject;
   int get mode => _mode;
   String get selectedProjectid => _selectedProjectid;
+  String get selectedSectionid => _selectedSectionid;
 
   void addSection(String section) {
     _sections.add(section);
@@ -46,6 +48,11 @@ class HomePageData extends ChangeNotifier {
 
   set selectedProjectid (String id){
     _selectedProjectid = id;
+    notifyListeners();
+  }
+
+  set selectedSectionid (String id){
+    _selectedSectionid = id;
     notifyListeners();
   }
 }

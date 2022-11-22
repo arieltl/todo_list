@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ProjectSideBar extends StatefulWidget {
   const ProjectSideBar({super.key});
-  final nestedSideBar = const SectionSideBar();
+  final nestedSideBar = const TodoSection();
   @override
   State<ProjectSideBar> createState() => _ProjectSideBarState();
 }
@@ -18,16 +18,18 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
       .collection("Projects")
       .where('collaborators',
           arrayContains: FirebaseAuth.instance.currentUser!.uid)
-      
+      .orderBy("dateCreated")
       .snapshots();
   final projectsReference = FirebaseFirestore.instance.collection("Projects");
   final uid = FirebaseAuth.instance.currentUser!.uid;
   void createProject() {
+    if (projectNameControler.text.trim() == "") return;
+
     projectsReference.add({
       "name": projectNameControler.text,
       "ownerId": uid,
-      "collaborators": [uid],
-      "dateCreated": Timestamp.now()
+      "collaborators": [uid ],
+      "dateCreated": DateTime.now().millisecondsSinceEpoch
     });
     projectNameControler.clear();
   }

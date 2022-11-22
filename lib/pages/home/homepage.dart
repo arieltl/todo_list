@@ -45,14 +45,14 @@ class _HomePageState extends ResponsivePageState<HomePage> {
           child: Row(
         children: [
            Expanded(
+            flex: 1,
             child: widget.desktopProj,
-            flex: 1,
           ),
           Expanded(
+            flex: 1,
             child: widget.desktopSec,
-            flex: 1,
           ),
-          Expanded(
+          const Expanded(
             flex: 3,
             child: SectionContent(),
           )

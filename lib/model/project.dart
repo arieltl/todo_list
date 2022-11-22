@@ -1,5 +1,3 @@
-import 'package:todo_list/model/section.dart';
-
 class Project {
   String name;
   String description;

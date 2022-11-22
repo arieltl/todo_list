@@ -12,7 +12,7 @@ class HomePage extends ResponsivePage {
   final mobilePage = const ProjectSideBar();
   final desktopProj = const ProjectSideBar();
   final tabletProj = const ProjectSideBar();
-  final desktopSec = const SectionSideBar();
+  final desktopSec = const TodoSection();
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -45,14 +45,14 @@ class _HomePageState extends ResponsivePageState<HomePage> {
           child: Row(
         children: [
            Expanded(
+            flex: 1,
             child: widget.desktopProj,
-            flex: 1,
           ),
           Expanded(
+            flex: 1,
             child: widget.desktopSec,
-            flex: 1,
           ),
-          Expanded(
+          const Expanded(
             flex: 3,
             child: SectionContent(),
           )

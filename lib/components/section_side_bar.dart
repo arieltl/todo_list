@@ -15,7 +15,25 @@ class _TodoSectionState extends State<TodoSection> {
 
   @override
   Widget build(BuildContext context) {
+
     final data = context.watch<HomePageData>();
+
+    if (data.selectedProjectid == "") {
+      return Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(60, 176, 55, 206),
+            Color.fromARGB(60, 31, 61, 171),
+          ],
+        )),
+        child: Center(
+          child: Text("Please select a project"),
+        ),
+      );
+    }
     final sections = data.sections;
     int selected = data.selectedSection;
     final project = data.selectedProjectid == "" ? "a" : data.selectedProjectid;

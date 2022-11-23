@@ -13,7 +13,7 @@ class ProjectSideBar extends StatefulWidget {
 }
 
 class _ProjectSideBarState extends State<ProjectSideBar> {
-  final projectNameControler = TextEditingController();
+  final _projectNameControler = TextEditingController();
   final projectsStream = FirebaseFirestore.instance
       .collection("Projects")
       .where('collaborators',
@@ -23,15 +23,15 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
   final projectsReference = FirebaseFirestore.instance.collection("Projects");
   final uid = FirebaseAuth.instance.currentUser!.uid;
   void createProject() {
-    if (projectNameControler.text.trim() == "") return;
+    if (_projectNameControler.text.trim() == "") return;
 
     projectsReference.add({
-      "name": projectNameControler.text,
+      "name": _projectNameControler.text,
       "ownerId": uid,
-      "collaborators": [uid ],
-      "dateCreated": DateTime.now().millisecondsSinceEpoch
+      "collaborators": [uid],
+      "dateCreated": Timestamp.now(),
     });
-    projectNameControler.clear();
+    _projectNameControler.clear();
   }
 
   Widget buildBody(BuildContext context, List<String> projetos) => Scaffold(
@@ -56,9 +56,9 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
               margin: const EdgeInsets.only(bottom: 20),
               child: TextField(
                 onSubmitted: ((value) => createProject()),
-                controller: projectNameControler,
+                controller: _projectNameControler,
                 decoration: InputDecoration(
-                    labelText: "Projetos",
+                    labelText: "Projects",
                     icon: IconButton(
                       onPressed: createProject,
                       icon: const Icon(Icons.add),

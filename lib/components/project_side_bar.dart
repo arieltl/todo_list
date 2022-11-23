@@ -4,6 +4,7 @@ import 'package:todo_list/pages/home/homepage_data.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:expandable/expandable.dart';
 
 class ProjectSideBar extends StatefulWidget {
   const ProjectSideBar({super.key});
@@ -22,6 +23,8 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
       .snapshots();
   final projectsReference = FirebaseFirestore.instance.collection("Projects");
   final uid = FirebaseAuth.instance.currentUser!.uid;
+  List<ExpandableController> tilesControllers = [];
+
   void createProject() {
     if (_projectNameControler.text.trim() == "") return;
 
@@ -32,6 +35,32 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
       "dateCreated": Timestamp.now(),
     });
     _projectNameControler.clear();
+  }
+
+  Widget buildTile(
+      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+    return ListTile(
+      onTap: () {
+        final data = context.read<HomePageData>();
+        data.selectedProjectid = snapshot.data!.docs[index].id;
+        if (data.mode < 2) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => widget.nestedSideBar));
+        }
+      },
+      tileColor: snapshot.data!.docs[index].id !=
+              context.read<HomePageData>().selectedProjectid
+          ? const Color.fromARGB(255, 167, 167, 167)
+          : const Color.fromARGB(255, 236, 236, 236),
+      title: Text(snapshot.data!.docs[index]["name"]),
+      leading: const Icon(Icons.arrow_right),
+      trailing: IconButton(
+        onPressed: () {
+          tilesControllers[index].expanded = !tilesControllers[index].expanded;
+        },
+        icon: const Icon(Icons.group_add_rounded),
+      ),
+    );
   }
 
   Widget buildBody(BuildContext context, List<String> projetos) => Scaffold(
@@ -71,33 +100,65 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
                   child: StreamBuilder<QuerySnapshot>(
                       stream: projectsStream,
                       builder: (context, snapshot) {
+                        if (snapshot.data?.docs.length !=
+                            tilesControllers.length) {
+                          tilesControllers = snapshot.data!.docs
+                              .map((e) => ExpandableController())
+                              .toList();
+                        }
                         return ListView.separated(
                             separatorBuilder: (context, index) =>
                                 const Divider(),
                             itemCount: snapshot.data?.docs.length ?? 0,
                             shrinkWrap: true,
-                            itemBuilder: (context, index) => ListTile(
-                                  onTap: () {
-                                    final data = context.read<HomePageData>();
-                                    data.selectedProjectid = snapshot.data!.docs[index].id;
-                                    if (data.mode < 2) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  widget.nestedSideBar));
-                                    }
-                                  },
-                                  tileColor: snapshot.data!.docs[index].id !=
-                                          context
-                                              .read<HomePageData>()
-                                              .selectedProjectid
-                                      ? const Color.fromARGB(255, 167, 167, 167)
-                                      : const Color.fromARGB(
-                                          255, 236, 236, 236),
-                                  title:
-                                      Text(snapshot.data!.docs[index]["name"]),
-                                  leading: const Icon(Icons.arrow_right),
-                                ));
+                            itemBuilder: (context, index) {
+                              final collabController = TextEditingController();
+
+                              void addCollaborator() {
+                                FirebaseFirestore.instance
+                                    .collection("Users")
+                                    .where("email",
+                                        isEqualTo: collabController.text)
+                                    .get()
+                                    .then((value) {
+                                  print("user ${value.docs.length}");
+                                  print(collabController.text);
+                                  if (value.docs.isNotEmpty) {
+                                    print(value.docs[0].id);
+                                    snapshot.data?.docs[index].reference
+                                        .update({
+                                      "collaborators": FieldValue.arrayUnion(
+                                          [value.docs[0].id])
+                                    });
+                                  }
+                                });
+                              }
+
+                              return ExpandablePanel(
+                                controller: tilesControllers[index],
+                                collapsed: buildTile(context, snapshot, index),
+                                expanded: Column(
+                                  children: [
+                                    buildTile(context, snapshot, index),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: TextField(
+                                        controller: collabController,
+                                        onSubmitted: (value) =>
+                                            addCollaborator(),
+                                        decoration: InputDecoration(
+                                            labelText: "Add Colaborators",
+                                            border: const OutlineInputBorder(),
+                                            icon: IconButton(
+                                              onPressed: addCollaborator,
+                                              icon: const Icon(Icons.add),
+                                            )),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
                       })),
             )
           ]),

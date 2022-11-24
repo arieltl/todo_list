@@ -100,7 +100,7 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
                   child: StreamBuilder<QuerySnapshot>(
                       stream: projectsStream,
                       builder: (context, snapshot) {
-                        if (snapshot.data?.docs.length !=
+                        if (snapshot.data != null && snapshot.data?.docs.length !=
                             tilesControllers.length) {
                           tilesControllers = snapshot.data!.docs
                               .map((e) => ExpandableController())
@@ -121,10 +121,7 @@ class _ProjectSideBarState extends State<ProjectSideBar> {
                                         isEqualTo: collabController.text)
                                     .get()
                                     .then((value) {
-                                  print("user ${value.docs.length}");
-                                  print(collabController.text);
                                   if (value.docs.isNotEmpty) {
-                                    print(value.docs[0].id);
                                     snapshot.data?.docs[index].reference
                                         .update({
                                       "collaborators": FieldValue.arrayUnion(

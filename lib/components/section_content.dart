@@ -34,17 +34,28 @@ class _SectionContentState extends State<SectionContent> {
         .collection("Todos")
         .orderBy("completed")
         .snapshots();
+    // final todoStream2 = FirebaseFirestore.instance.collectionGroup("Todos").where("tags",arrayContains: tag).where(field)
+
     final inputController = TextEditingController();
 
     void createTodo() {
       final text = inputController.text;
       final words = text.split(" ");
       final tags = words.where((word) => word.startsWith("#")).toList();
+      List<String> importances = words
+          .where((word) =>
+              word.startsWith("!") && word.toLowerCase().endsWith("important"))
+          .toList();
+      final importance = importances
+          .map((e) => e.length - e.replaceAll("!", " ").trimLeft().length).followedBy([0])
+          .reduce((a, b) => a > b ? a : b);
+
       todoReference.add({
         "completed": false,
         "text": text,
         "dateCreated": Timestamp.now(),
         "tags": tags,
+        "importance": importance,
       });
 
       inputController.clear();
@@ -80,31 +91,97 @@ class _SectionContentState extends State<SectionContent> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final doc = snapshot.data!.docs[index];
-                            return ListTile(
-                              title: RichText(
-                                text: TextSpan(
-                                  text: "",
-                                  children: List<InlineSpan>.from(doc["text"].split(" ").map(
-                                        (word) => TextSpan(
-                                          text: word + " ",
-                                          style: TextStyle(
-                                            color: word.startsWith("#")
-                                                ? Colors.blue
-                                                : Colors.black,
-                                            fontWeight: word.startsWith("#")
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                          ),
-                                        ),
-                                      ).toList()),
-                                
+                            final int importance = doc["importance"] ?? 0;
+                            String lowerText =
+                                doc["text"].toString().toLowerCase();
+                            return ClipRRect(
+                              clipBehavior: Clip.hardEdge,
+                              child: Dismissible(
+                                key: ValueKey<String>(doc.id),
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        child: Icon(Icons.delete),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              trailing: Checkbox(
-                                value: doc["completed"],
-                                onChanged: (value) {
-                                  doc.reference.update({"completed": value});
-                                },
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (direction) =>
+                                    doc.reference.delete(),
+                                child: ListTile(
+                                  // tileColor: lowerText.contains("!!!important")
+                                  //     ? Color.fromARGB(240, 180, 4, 4)
+                                  //     : lowerText.contains("!!important")
+                                  //         ? Color.fromARGB(200, 180, 4, 4)
+                                  //         : lowerText.contains("!important")
+                                  //             ? Color.fromARGB(150, 180, 4, 4)
+                                  //             : Colors.transparent,
+                                  tileColor: importance >=3
+                                      ? Color.fromARGB(240, 210, 20, 4)
+                                      : importance==2
+                                          ? Color.fromARGB(210, 210, 20, 4)
+                                          : importance == 1
+                                              ? Color.fromARGB(150, 210, 20, 4)
+                                              : Colors.transparent,
+                                  title: RichText(
+                                    text: TextSpan(
+                                      text: "",
+                                      children:
+                                          List<InlineSpan>.from(doc["text"]
+                                              .split(" ")
+                                              .map(
+                                                (word) => TextSpan(
+                                                  text: word + " ",
+                                                  style: TextStyle(
+                                                      color: word.startsWith(
+                                                                  "!") &&
+                                                              word
+                                                                  .toLowerCase()
+                                                                  .endsWith(
+                                                                      "important")
+                                                          ? Colors.yellow
+                                                          : word.startsWith("#")
+                                                              ? Colors.blue
+                                                              : Colors.black,
+                                                      fontWeight: word
+                                                                  .startsWith(
+                                                                      "!") &&
+                                                              word
+                                                                  .toLowerCase()
+                                                                  .endsWith(
+                                                                      "important")
+                                                          ? FontWeight.bold
+                                                          : word.startsWith("#")
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
+                                                      fontSize: word.startsWith(
+                                                                  "!") &&
+                                                              word
+                                                                  .toLowerCase()
+                                                                  .endsWith(
+                                                                      "important")
+                                                          ? 16
+                                                          : 15),
+                                                ),
+                                              )
+                                              .toList()),
+                                    ),
+                                  ),
+                                  trailing: Checkbox(
+                                    value: doc["completed"],
+                                    onChanged: (value) {
+                                      doc.reference
+                                          .update({"completed": value});
+                                    },
+                                  ),
+                                ),
                               ),
                             );
                           });

@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-   _resetPassword() {
+   _resetPassword(BuildContext context) {
     FirebaseAuth.instance
         .sendPasswordResetEmail(email: _login.text.trim()).then((value) => {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: 200,
                         child: TextButton(
                           onPressed: () {
-                            _resetPassword();
+                            _resetPassword(context);
                           },
                           child: const Text("Esqueci a Senha"),
                         ))

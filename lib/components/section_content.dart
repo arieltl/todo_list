@@ -62,6 +62,11 @@ class _SectionContentState extends State<SectionContent> {
     }
 
     return Scaffold(
+       appBar: context.watch<HomePageData>().mode <= 1
+          ? AppBar(
+              title: const Text("ToDos"),
+            )
+          : null,
         body: Container(
             color: const Color.fromARGB(51, 209, 209, 209),
             child: Column(
